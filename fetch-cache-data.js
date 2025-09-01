@@ -69,23 +69,20 @@ async function main() {
       }
     }
     
-    // Save to cache file
+    // Save to cache file with timestamp (React app expects this format)
     const cacheData = {
       timestamp: new Date().toISOString(),
       lastUpdated: new Date().toISOString(),
       data: allData
     };
     
-    // Save as both file names for compatibility
-    const localCacheFile = path.join(cacheDir, 'sheets-data.json');
-    const githubCacheFile = path.join(cacheDir, 'investor-cache.json');
+    // Only save investor-cache.json (with timestamp structure)
+    const cacheFile = path.join(cacheDir, 'investor-cache.json');
     
-    fs.writeFileSync(localCacheFile, JSON.stringify(cacheData, null, 2));
-    fs.writeFileSync(githubCacheFile, JSON.stringify(allData, null, 2)); // GitHub expects just the data object
+    fs.writeFileSync(cacheFile, JSON.stringify(cacheData, null, 2));
     
     console.log(`✅ Cache updated successfully!`);
-    console.log(`📁 Local cache: ${localCacheFile}`);
-    console.log(`📁 GitHub cache: ${githubCacheFile}`);
+    console.log(`📁 Cache file: ${cacheFile}`);
     console.log(`📊 Total sheets cached: ${Object.keys(allData).length}`);
     console.log(`🕒 Timestamp: ${cacheData.timestamp}`);
     
