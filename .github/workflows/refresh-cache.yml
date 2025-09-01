@@ -7,6 +7,9 @@ on:
   push:
     branches: [ main ]   # Also refresh on code pushes
 
+permissions:
+  contents: write       # <-- Give GITHUB_TOKEN write access
+
 jobs:
   update-cache:
     runs-on: ubuntu-latest
