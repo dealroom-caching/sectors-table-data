@@ -1,0 +1,38 @@
+name: Auto-refresh Google Sheets cache
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # Daily at 2 AM UTC
+  workflow_dispatch:     # Manual trigger button
+  push:
+    branches: [ main ]   # Also refresh on code pushes
+
+jobs:
+  update-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Fetch fresh Google Sheets data
+        run: node fetch-cache-data.js
+      
+      - name: Commit updated cache
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add public/cached-data/
+          if ! git diff --staged --quiet; then
+            git commit -m "🔄 Auto-update cached Google Sheets data [$(date +'%Y-%m-%d %H:%M:%S UTC')]"
+            git push
+          else
+            echo "No cache changes to commit"
+          fi
