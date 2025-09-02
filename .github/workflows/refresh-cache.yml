@@ -2,7 +2,7 @@ name: Auto-refresh Google Sheets cache
 
 on:
   schedule:
-    - cron: '0 2 * * *'  # Daily at 2 AM UTC
+    - cron: '0 */6 * * *'  # Every 6 hours (00:00, 06:00, 12:00, 18:00 UTC)
   workflow_dispatch:     # Manual trigger button
   push:
     branches: [ main ]   # Also refresh on code pushes
