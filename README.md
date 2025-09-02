@@ -1,6 +1,6 @@
-# LP Data Cache
+# Sector Table Data Cache
 
-This repository contains automatically updated cache data for the LP ranking application.
+This repository contains automatically updated cache data for sector table applications.
 
 ## How it works
 
@@ -45,4 +45,4 @@ The cache contains data from Google Sheets with the following structure:
 ## Access
 
 The cache is publicly accessible via GitHub raw files:
-- `https://raw.githubusercontent.com/Kjeld-dealroom/lp-data/main/public/cached-data/investor-cache.json`
+- `https://raw.githubusercontent.com/Kjeld-dealroom/sectors-table-data/main/public/cached-data/investor-cache.json`
