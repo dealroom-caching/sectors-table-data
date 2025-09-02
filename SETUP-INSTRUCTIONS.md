@@ -13,14 +13,14 @@
    git add .
    git commit -m "Initial commit: Sector table data cache with automated updates"
    git branch -M main
-   git remote add origin https://github.com/Kjeld-dealroom/sectors-table-data.git
+   git remote add origin https://github.com/dealroom-caching/sectors-table-data.git
    git push -u origin main
    ```
 
 ## Step 2: Configure GitHub Repository
 
 1. **Make the repository public:**
-   - Go to https://github.com/Kjeld-dealroom/sectors-table-data
+   - Go to https://github.com/dealroom-caching/sectors-table-data
    - Click "Settings" tab
    - Scroll down to "Danger Zone"
    - Click "Change repository visibility"
@@ -48,7 +48,7 @@
    - Check if `public/cached-data/investor-cache.json` was updated
    - Verify the raw URL works:
      ```
-     https://raw.githubusercontent.com/Kjeld-dealroom/sectors-table-data/main/public/cached-data/investor-cache.json
+     https://raw.githubusercontent.com/dealroom-caching/sectors-table-data/main/public/cached-data/investor-cache.json
      ```
 
 ## Step 4: Verify with Your App

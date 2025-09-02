@@ -45,4 +45,4 @@ The cache contains data from Google Sheets with the following structure:
 ## Access
 
 The cache is publicly accessible via GitHub raw files:
-- `https://raw.githubusercontent.com/Kjeld-dealroom/sectors-table-data/main/public/cached-data/investor-cache.json`
+- `https://raw.githubusercontent.com/dealroom-caching/sectors-table-data/main/public/cached-data/investor-cache.json`

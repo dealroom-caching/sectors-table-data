@@ -8,9 +8,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kjeld-dealroom/sectors-table-data.git"
+    "url": "git+https://github.com/dealroom-caching/sectors-table-data.git"
   },
   "author": "Kjeld",
   "license": "MIT",
-  "homepage": "https://github.com/Kjeld-dealroom/sectors-table-data#readme"
+  "homepage": "https://github.com/dealroom-caching/sectors-table-data#readme"
 }
