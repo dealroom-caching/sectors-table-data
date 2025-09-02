@@ -45,10 +45,10 @@
 
 2. **Check if it works:**
    - Wait for the action to complete
-   - Check if `public/cached-data/investor-cache.json` was updated
+   - Check if `public/cached-data/sectors-cache.json` was updated
    - Verify the raw URL works:
      ```
-     https://raw.githubusercontent.com/dealroom-caching/sectors-table-data/main/public/cached-data/investor-cache.json
+     https://raw.githubusercontent.com/dealroom-caching/sectors-table-data/main/public/cached-data/sectors-cache.json
      ```
 
 ## Step 4: Verify with Your App
@@ -64,7 +64,7 @@ Once the GitHub repo is set up and the raw URL is working, your main application
 - `package.json` - Node.js project configuration
 - `fetch-cache-data.js` - Script to fetch data from Google Sheets
 - `.github/workflows/refresh-cache.yml` - GitHub Action workflow
-- `public/cached-data/investor-cache.json` - Initial cache file
+- `public/cached-data/sectors-cache.json` - Initial cache file
 - `.gitignore` - Git ignore rules
 - `README.md` - Repository documentation
 

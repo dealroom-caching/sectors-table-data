@@ -3,20 +3,26 @@ import path from 'path';
 
 // Note: Using built-in fetch API available in Node.js 18+
 // Google Sheets configuration
-const SHEET_ID = "1jUOqG0PaCYFsqNd1Sq2etqJ0prbZgPIoJVuwWh192IQ";
+const SHEET_ID = "1LutC2VxesrS-5Ym8VydVvgLh8stH66vY_Bor1g7lY2A";
 
-// Just fetch the actual sheets that exist
-const SHEET_NAMES = ["lovable", "weights"]; // Simplified - just fetch what exists
+// Fetch sheets by GID (more reliable than names)
+const SHEET_CONFIGS = [
+  { name: "overview", gid: "109336614" },
+  { name: "yearly", gid: "1515439227" },
+  { name: "quarterly", gid: "966294539" },
+  { name: "enterpriseValue", gid: "350477002" },
+  { name: "regional", gid: "840041598" }
+];
 
-async function fetchGoogleSheetData(sheetName) {
+async function fetchGoogleSheetData(sheetConfig) {
   const timestamp = Date.now();
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&range=A1:BH1048576&headers=1&timestamp=${timestamp}`;
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${sheetConfig.gid}&range=A1:BH1048576&headers=1&timestamp=${timestamp}`;
   
-  console.log(`Fetching ${sheetName}...`);
+  console.log(`Fetching ${sheetConfig.name} (GID: ${sheetConfig.gid})...`);
   
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`Failed to fetch ${sheetName}: ${response.statusText}`);
+    throw new Error(`Failed to fetch ${sheetConfig.name}: ${response.statusText}`);
   }
   
   const text = await response.text();
@@ -28,7 +34,7 @@ async function fetchGoogleSheetData(sheetName) {
   const data = JSON.parse(jsonText);
   
   if (!data.table || !data.table.rows) {
-    throw new Error(`No data found in ${sheetName}`);
+    throw new Error(`No data found in ${sheetConfig.name}`);
   }
   
   // Convert to our format
@@ -40,9 +46,7 @@ async function fetchGoogleSheetData(sheetName) {
   return {
     headers,
     rows,
-    weightedColumns: sheetName === 'weights' ? 
-      rows[0]?.map(cell => cell && typeof cell === 'string' && cell.toLowerCase().includes('weighted')) || [] :
-      Array(headers.length).fill(false)
+    weightedColumns: Array(headers.length).fill(false) // Remove weights-specific logic since we have different sheets now
   };
 }
 
@@ -56,16 +60,16 @@ async function main() {
       fs.mkdirSync(cacheDir, { recursive: true });
     }
     
-    // Fetch all sheets (simple approach - no duplication)
+    // Fetch all sheets using GIDs
     const allData = {};
-    for (const sheetName of SHEET_NAMES) {
+    for (const sheetConfig of SHEET_CONFIGS) {
       try {
-        allData[sheetName] = await fetchGoogleSheetData(sheetName);
-        console.log(`✅ ${sheetName}: ${allData[sheetName].rows.length} rows`);
+        allData[sheetConfig.name] = await fetchGoogleSheetData(sheetConfig);
+        console.log(`✅ ${sheetConfig.name}: ${allData[sheetConfig.name].rows.length} rows`);
       } catch (error) {
-        console.error(`❌ Failed to fetch ${sheetName}:`, error.message);
+        console.error(`❌ Failed to fetch ${sheetConfig.name}:`, error.message);
         // Continue with other sheets instead of failing completely
-        console.log(`⚠️ Skipping ${sheetName} and continuing...`);
+        console.log(`⚠️ Skipping ${sheetConfig.name} and continuing...`);
       }
     }
     
@@ -76,8 +80,8 @@ async function main() {
       data: allData
     };
     
-    // Only save investor-cache.json (with timestamp structure)
-    const cacheFile = path.join(cacheDir, 'investor-cache.json');
+    // Save as sectors-cache.json (with timestamp structure)
+    const cacheFile = path.join(cacheDir, 'sectors-cache.json');
     
     fs.writeFileSync(cacheFile, JSON.stringify(cacheData, null, 2));
     

@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
+          fetch-depth: 1
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -26,7 +26,10 @@ jobs:
           node-version: '18'
       
       - name: Fetch fresh Google Sheets data
-        run: node fetch-cache-data.js
+        run: |
+          echo "🔄 Fetching fresh Google Sheets data..."
+          node fetch-cache-data.js
+        continue-on-error: false
       
       - name: Commit updated cache
         run: |
@@ -34,7 +37,7 @@ jobs:
           git config --local user.name "GitHub Action"
           git add public/cached-data/
           if ! git diff --staged --quiet; then
-            git commit -m "🔄 Auto-update cached Google Sheets data [$(date +'%Y-%m-%d %H:%M:%S UTC')]"
+            git commit -m "🔄 Auto-update cached Google Sheets data [$(TZ=UTC date +'%Y-%m-%d %H:%M:%S UTC')]"
             git push
           else
             echo "No cache changes to commit"
